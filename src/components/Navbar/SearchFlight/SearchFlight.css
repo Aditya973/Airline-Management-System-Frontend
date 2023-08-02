@@ -1,0 +1,26 @@
+.container1{
+}
+.searchBox{
+    display: flex;
+    justify-content: center;
+}
+.searchCard{
+    width: 50%;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    border: 2px solid black;
+}
+.selectBox{
+    display: flex;
+    justify-content: space-evenly;
+}
+.searchBtn{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.searchResults{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}

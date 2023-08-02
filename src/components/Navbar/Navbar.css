@@ -1,0 +1,28 @@
+.container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background-color: rgb(94, 0, 94);
+}
+.leftLayout{
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    color: white;
+}
+.navbar ul{
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+.navbar ul li{
+    cursor: pointer;
+}
+.rightLayout{
+    display: flex;
+    gap: 20px;
+}
+.btn{
+    color:rgb(94, 0, 94);
+}
