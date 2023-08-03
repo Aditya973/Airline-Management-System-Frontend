@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Select, Card, Button, Space } from "antd";
 import "./SearchFlight.css";
-import Flight from "../../Flight";
+import Flight from "../Flight";
 
 function SearchFlight() {
   const [cityList, setCityList] = useState([]);
   const [sourceCity, setSourceCity] = useState("");
   const [destinationCity, setDestinationCity] = useState("");
   const [flightList,setFlightList] = useState([]);
+  const [airportList, setAirportList] = useState([]);
+  const [airplaneList, setAirplaneList] = useState([]);
+
   async function fetchData() {
     const response = await fetch("http://localhost:3010/api/v1/city");
     const jsonData = await response.json();
@@ -41,8 +44,37 @@ function SearchFlight() {
     const cityId = cityList.find((city) => city.value === cityName).cityId;
     setDestinationCity(cityId);
   }
+
+  async function fetchAirplaneAndAirportData() {
+    const airportResponse = await fetch("http://localhost:3010/api/v1/airport");
+    const airportsjsonData = await airportResponse.json();
+    let airportData = airportsjsonData.data;
+    let tempArr = [];
+    tempArr = airportData.map((airport) => {
+      return {
+        label: airport.name,
+        value: airport.id,
+      };
+    });
+    setAirportList(tempArr);
+    tempArr = [];
+    const airplaneResponse = await fetch(
+      "http://localhost:3010/api/v1/airplane"
+    );
+    const airplaneJsonData = await airplaneResponse.json();
+    let airplaneData = airplaneJsonData.data;
+    tempArr = airplaneData.map((airplane) => {
+      return {
+        label: airplane.modelNumber,
+        value: airplane.id,
+      };
+    });
+    setAirplaneList(tempArr);
+  }
+
   useEffect(() => {
     fetchData();
+    fetchAirplaneAndAirportData();
   }, []);
 
   return (
@@ -103,7 +135,7 @@ function SearchFlight() {
       <div className="searchResults">
         {
           flightList.map((item)=>{
-            return <Flight key = {item.id} item = {item}/>
+            return <Flight key = {item.id} item = {item} airplaneList = {airplaneList} airportList = {airportList}/>
           })
         }
       </div>
