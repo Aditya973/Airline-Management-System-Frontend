@@ -1,52 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Input, Modal, Select } from "antd";
+import axios from 'axios';
 const EditFlight = (props) => {
   const flightData = props.flightData;
-  const [arrivalAirport, setArrivalAirport] = useState(props.arrivalAirport);
+  const [arrivalAirport, setArrivalAirport] = useState(flightData.arrivalAirportId);
   const [departureAirport, setDepartureAirport] = useState(
-    props.departureAirport
+    flightData.departureAirportId
   );
-  // const [airportList, setAirportList] = useState([]);
+  const [price,setPrice] = useState(flightData.price);
+  const [airplaneModelId,setAirplaneModelId] = useState(flightData.airplaneId);
   const airplaneList = props.airplaneList;
   const airportList = props.airportList;
-  // const [airplaneList, setAirplaneList] = useState([]);
   const [open, setOpen] = useState(false);
-  // async function fetchAirplaneAndAirportData() {
-  //   const airportResponse = await fetch("http://localhost:3010/api/v1/airport");
-  //   const airportsjsonData = await airportResponse.json();
-  //   let airportData = airportsjsonData.data;
-  //   let tempArr = [];
-  //   tempArr = airportData.map((airport) => {
-  //     return {
-  //       label: airport.name,
-  //       value: airport.id,
-  //     };
-  //   });
-  //   setAirportList(tempArr);
-  //   tempArr = [];
-  //   const airplaneResponse = await fetch(
-  //     "http://localhost:3010/api/v1/airplane"
-  //   );
-  //   const airplaneJsonData = await airplaneResponse.json();
-  //   let airplaneData = airplaneJsonData.data;
-  //   tempArr = airplaneData.map((airplane) => {
-  //     return {
-  //       label: airplane.modelNumber,
-  //       value: airplane.id,
-  //     };
-  //   });
-  //   setAirplaneList(tempArr);
-  // }
-
-  // useEffect(() => {
-  //   fetchAirplaneAndAirportData();
-  // }, []);
-
+  
   const showModal = () => {
     setOpen(true);
   };
-  const handleOk = (e) => {
+  const handleOk = async (e) => {
     console.log(e);
+    let updatedData = {
+      departureAirportId: departureAirport,
+      arrivalAirportId: arrivalAirport,
+      price: price,
+      airplaneId: airplaneModelId
+    }
+    const response = await axios.patch(`http://localhost:3010/api/v1/flight/${flightData.id}`,updatedData);
     setOpen(false);
   };
   const handleCancel = (e) => {
@@ -97,7 +75,7 @@ const EditFlight = (props) => {
                   .localeCompare((optionB?.label ?? "").toLowerCase())
               }
               options={airportList}
-              onChange={(value) => {}}
+              onChange={(value) => {setDepartureAirport(value)}}
             />
           </Form.Item>
           <Form.Item
@@ -119,11 +97,11 @@ const EditFlight = (props) => {
                   .localeCompare((optionB?.label ?? "").toLowerCase())
               }
               options={airportList}
-              onChange={(value) => {}}
+              onChange={(value) => {setArrivalAirport(value)}}
             />
           </Form.Item>
           <Form.Item name="Price" label="Price" rules={[{ required: true }]}>
-            <Input type="number" defaultValue={flightData.price} />
+            <Input type="number" defaultValue={flightData.price} onChange={(e)=>{setPrice(e.target.value)}}/>
           </Form.Item>
           <Form.Item
             name="Airplane"
@@ -144,7 +122,7 @@ const EditFlight = (props) => {
                   .localeCompare((optionB?.label ?? "").toLowerCase())
               }
               options={airplaneList}
-              onChange={(value) => {}}
+              onChange={(value) => {setAirplaneModelId(value)}}
             />
           </Form.Item>
         </Form>
