@@ -9,6 +9,8 @@ const EditFlight = (props) => {
   );
   const [price,setPrice] = useState(flightData.price);
   const [airplaneModelId,setAirplaneModelId] = useState(flightData.airplaneId);
+  const [departureTime,setDepartureTime] = useState(flightData.departureTime);
+  const [arrivalTime,setArrivalTime] = useState(flightData.arrivalTime);
   const airplaneList = props.airplaneList;
   const airportList = props.airportList;
   const [open, setOpen] = useState(false);
@@ -22,7 +24,9 @@ const EditFlight = (props) => {
       departureAirportId: departureAirport,
       arrivalAirportId: arrivalAirport,
       price: price,
-      airplaneId: airplaneModelId
+      airplaneId: airplaneModelId,
+      departureTime: departureTime,
+      arrivalTime: arrivalTime
     }
     const response = await axios.patch(`http://localhost:3010/api/v1/flight/${flightData.id}`,updatedData);
     setOpen(false);
@@ -124,6 +128,22 @@ const EditFlight = (props) => {
               options={airplaneList}
               onChange={(value) => {setAirplaneModelId(value)}}
             />
+          </Form.Item>
+          <Form.Item
+          name="departureTime"
+          label="Departure Time">
+            <Input type="datetime-local" defaultValue={flightData.departureTime} onChange={(e)=>{
+              console.log(e.target.value);
+              setDepartureTime(e.target.value);
+            }}/>
+          </Form.Item>
+          <Form.Item
+          name="arrivalTime"
+          label="Arrival Time">
+            <Input type="datetime-local" defaultValue={flightData.departureTime} onChange={(e)=>{
+              console.log(e.target.value);
+              setArrivalTime(e.target.value);
+            }}/>
           </Form.Item>
         </Form>
       </Modal>
